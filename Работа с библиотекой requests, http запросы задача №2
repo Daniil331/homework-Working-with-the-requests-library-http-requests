@@ -28,17 +28,21 @@ class YaUploader:
         pprint(response.json())
         return response.json()
 
-    def upload_file_to_disk(self, disk_file_path):
+    def upload_file_to_disk(self, disk_file_path, filename):
         href_json = self._get_upload_link(disk_file_path=disk_file_path)
         href = href_json['href']
-        response = requests.put(href) #data=open(filename, 'rb'))
+        response = requests.put(href, data=open(filename, 'rb'))
         response.raise_for_status()
         if response.status_code == 201:
             print("Success")
+        else:
+            print('Failet')
 
 if __name__ == '__main__':
     # Получить путь к загружаемому файлу и токен от пользователя
-    path_to_file = 'test/file.txt'
-    token = ''
+    disk_file_path = '/disk.txt'
+    token = 'AQAAAAAyhekUAADLWyLGJq9g806MkylfQ0tnanQ'
     uploader = YaUploader(token)
-    result = uploader.upload_file_to_disk(path_to_file)
+    result = uploader.upload_file_to_disk(disk_file_path, '1file.txt')
+
+    pprint(result)
